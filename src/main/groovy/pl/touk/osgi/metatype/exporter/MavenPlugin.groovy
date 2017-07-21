@@ -31,7 +31,7 @@ class MavenPlugin extends AbstractMojo {
     private void exportConfigIfMetatypeFileExists(File metatypeFile) {
         if (metatypeFile) {
             // TODO move to config
-            ConfigExporter exporter = new ConfigExporter()
+            MetatypeExporter exporter = new MetatypeExporter(new Config([:]))
             exporter.configToFile(metatypeFile.absolutePath, "${project.model.build.directory}${File.separator}config.md")
         }
     }

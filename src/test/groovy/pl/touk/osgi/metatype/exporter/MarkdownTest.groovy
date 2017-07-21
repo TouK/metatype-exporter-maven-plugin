@@ -2,8 +2,8 @@ package pl.touk.osgi.metatype.exporter
 
 import spock.lang.Specification
 
-class MarkdownFormatterTest extends Specification {
-    MarkdownFormatter sut = new MarkdownFormatter()
+class MarkdownTest extends Specification {
+    Config config = new Config([:])
 
     def 'all fields and one row'() {
         given:
@@ -20,9 +20,10 @@ class MarkdownFormatterTest extends Specification {
                 )
             ]
         expect:
-            sut.format(metatypes) == '''| ID        | Nazwa       | Wymagany | Typ         | Opis               | Wartość domyślna     |
+            new Markdown(config, metatypes).content() == '''\
+| ID        | Name        | Required | Type        | Description        | Default value        |
 | --------- | ----------- | -------- | ----------- | ------------------ | -------------------- |
-| sample.id | sample name | Tak      | sample type | sample description | sample default value |'''
+| sample.id | sample name | Yes      | sample type | sample description | sample default value |'''
     }
 
     def 'all fields and two rows'() {
@@ -50,11 +51,11 @@ class MarkdownFormatterTest extends Specification {
                 )
             ]
         expect:
-            sut.format(metatypes) == '''\
-| ID        | Nazwa       | Wymagany | Typ         | Opis               | Wartość domyślna     |
+            new Markdown(config, metatypes).content() == '''\
+| ID        | Name        | Required | Type        | Description        | Default value        |
 | --------- | ----------- | -------- | ----------- | ------------------ | -------------------- |
-| sample.id | sample name | Tak      | sample type | sample description | sample default value |
-| other.id  | other name  | Nie      | other type  | other description  | other default value  |'''
+| sample.id | sample name | Yes      | sample type | sample description | sample default value |
+| other.id  | other name  | No       | other type  | other description  | other default value  |'''
     }
 
     def 'all fields and two rows reversed'() {
@@ -82,11 +83,11 @@ class MarkdownFormatterTest extends Specification {
                 )
             ]
         expect:
-            sut.format(metatypes) == '''\
-| ID        | Nazwa       | Wymagany | Typ         | Opis               | Wartość domyślna     |
+            new Markdown(config, metatypes).content() == '''\
+| ID        | Name        | Required | Type        | Description        | Default value        |
 | --------- | ----------- | -------- | ----------- | ------------------ | -------------------- |
-| other.id  | other name  | Nie      | other type  | other description  | other default value  |
-| sample.id | sample name | Tak      | sample type | sample description | sample default value |'''
+| other.id  | other name  | No       | other type  | other description  | other default value  |
+| sample.id | sample name | Yes      | sample type | sample description | sample default value |'''
     }
 
     def 'only required and full rows'() {
@@ -110,11 +111,11 @@ class MarkdownFormatterTest extends Specification {
                 )
             ]
         expect:
-            sut.format(metatypes) == '''\
-| ID        | Nazwa       | Wymagany | Typ         | Opis               | Wartość domyślna     |
+            new Markdown(config, metatypes).content() == '''\
+| ID        | Name        | Required | Type        | Description        | Default value        |
 | --------- | ----------- | -------- | ----------- | ------------------ | -------------------- |
-| sample.id | sample name | Tak      | sample type | sample description | sample default value |
-| empty.id  |             | Tak      | some type   |                    |                      |'''
+| sample.id | sample name | Yes      | sample type | sample description | sample default value |
+| empty.id  |             | Yes      | some type   |                    |                      |'''
     }
 
     def 'only required fields'() {
@@ -128,16 +129,16 @@ class MarkdownFormatterTest extends Specification {
                 )
             ]
         expect:
-            sut.format(metatypes) == '''\
-| ID       | Wymagany | Typ       |
+            new Markdown(config, metatypes).content() == '''\
+| ID       | Required | Type      |
 | -------- | -------- | --------- |
-| empty.id | Tak      | some type |'''
+| empty.id | Yes      | some type |'''
     }
 
     def 'should return empty value for empty input'() {
         expect:
-            sut.format(input) == null
+            new Markdown(config, metatypes).content() == null
         where:
-            input << [null, []]
+            metatypes << [null, []]
     }
 }

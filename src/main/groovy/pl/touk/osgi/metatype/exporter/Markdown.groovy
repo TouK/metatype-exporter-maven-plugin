@@ -1,22 +1,10 @@
 package pl.touk.osgi.metatype.exporter
 
-class MarkdownFormatter implements Formatter {
-    // TODO refactor to multiple languages - maybe pluggable?
-    private final Map<String, String> friendlyNamesInPolish = [
-        'id' : 'ID',
-        'name' : 'Nazwa',
-        'description' : 'Opis',
-        'type' : 'Typ',
-        'default' : 'Wartość domyślna',
-        'required' : 'Wymagany'
-    ]
-    private final Map<String, String> booleanInPolsih = [
-        'true' : 'Tak',
-        'false' : 'Nie',
-        '' : 'Tak'
-    ]
+class Markdown implements Content {
+    private final Language language = new Language()
+    private final Config config
+    private final List<Metatype> metatypes
 
-    // TODO from config
     private final List<String> order = [
         'id',
         'name',
@@ -26,8 +14,14 @@ class MarkdownFormatter implements Formatter {
         'default'
     ]
 
+// TODO from config
+    Markdown(Config config, List<Metatype> metatypes) {
+        this.config = config
+        this.metatypes = metatypes
+    }
+
     @Override
-    String format(List<Metatype> metatypes) {
+    String content() {
         if (!metatypes) {
             return null
         }
@@ -47,7 +41,7 @@ class MarkdownFormatter implements Formatter {
 
     private void translateBooleans(List<Metatype> metatypes) {
         metatypes.each {
-            it['required'] = booleanInPolsih[it['required'] ?: '']
+            it['required'] = language.getBooleanTranslation(config.language)[it['required'] ?: '']
         }
     }
 
@@ -63,11 +57,11 @@ class MarkdownFormatter implements Formatter {
             .findAll()
             .collect { it.length() }
             .max()
-        return Math.max(longestValue, friendlyNamesInPolish[attribute].length())
+        return Math.max(longestValue, language.getFriendlyNames(config.language)[attribute].length())
     }
 
     private String header(Map<String, Integer> attributesLengths) {
-        return '| ' + attributesLengths.collect { attribute, length -> friendlyNamesInPolish[attribute].padRight(length) }.join(' | ') + ' |'
+        return '| ' + attributesLengths.collect { attribute, length -> language.getFriendlyNames(config.language)[attribute].padRight(length) }.join(' | ') + ' |'
     }
 
     private String border(Map<String, Integer> attributesLengths) {

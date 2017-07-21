@@ -3,13 +3,18 @@ package pl.touk.osgi.metatype.exporter
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class ConfigExporter {
+class MetatypeExporter {
     private final MetatypeReader reader = new MetatypeReader()
-    private final Formatter formatter = new MarkdownFormatter()
+    private final Config config
+
+    MetatypeExporter(Config config) {
+        this.config = config
+    }
 
     void configToFile(String inputPath, String outputPath) {
         List<Metatype> metatypes = reader.read(inputPath)
-        String content = formatter.format(metatypes)
+        Markdown markdown = new Markdown(config, metatypes)
+        String content = markdown.content()
         if (content) {
             saveToFile(outputPath, content)
         }
