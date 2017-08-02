@@ -15,24 +15,36 @@ class MavenPlugin extends AbstractMojo {
     @Parameter(defaultValue = '${project}', required = true, readonly = true)
     private MavenProject project
 
+    @Parameter(required = false, defaultValue = '${project.build.directory}')
+    private String destination
+
+    @Parameter(required = false, defaultValue = 'Config.md')
+    private String outputFileName
+
     @Override
     void execute() throws MojoExecutionException, MojoFailureException {
         log.info('exporting metatype documentation')
-        // TODO handle all files from OSGI-INF/metatype directory
-        File metatypeFile = project.resources
-            .collect { it.directory }
-            .collect { "$it${File.separator}OSGI-INF${File.separator}metatype${File.separator}metatype.xml" }
-            .collect { new File(it) }
-            .find()
+        List<File> metatypeFiles = findMetatypes()
 
-        exportConfigIfMetatypeFileExists(metatypeFile)
+        exportConfigIfMetatypeFileExists(metatypeFiles)
     }
 
-    private void exportConfigIfMetatypeFileExists(File metatypeFile) {
-        if (metatypeFile) {
+    private List<File> findMetatypes() {
+        return project.resources
+            .collect { new File(it.directory) }
+            .collect { baseDir -> new File(baseDir, 'OSGI-INF') }
+            .findAll { it.exists() }
+            .collect { osgiInf -> new File(osgiInf, 'metatype') }
+            .findAll { it.exists() }
+            .collectMany { metatypeDir -> metatypeDir.listFiles({ String fileName -> fileName.endsWith('.xml') } as FilenameFilter) as List }
+    }
+
+    private void exportConfigIfMetatypeFileExists(List<File> metatypeFiles) {
+        if (metatypeFiles) {
             // TODO move to config
             MetatypeExporter exporter = new MetatypeExporter(new Config([:]))
-            exporter.configToFile(metatypeFile.absolutePath, "${project.model.build.directory}${File.separator}config.md")
+            // TODO parse all, not only first
+            exporter.configToFile(metatypeFiles.find().absolutePath, new File(destination, outputFileName).absolutePath)
         }
     }
 
