@@ -1,5 +1,6 @@
-package pl.touk.osgi.metatype.exporter
+package pl.touk.osgi.metatype.exporter.domain.markdown
 
+import pl.touk.osgi.metatype.exporter.domain.markdown.language.Language
 import spock.lang.Specification
 
 class LanguageTest extends Specification {

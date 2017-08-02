@@ -1,4 +1,4 @@
-package pl.touk.osgi.metatype.exporter
+package pl.touk.osgi.metatype.exporter.domain.markdown.language
 
 import groovy.transform.CompileStatic
 

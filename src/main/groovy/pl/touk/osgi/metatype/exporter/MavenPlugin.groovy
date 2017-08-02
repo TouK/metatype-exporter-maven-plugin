@@ -8,6 +8,9 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
+import pl.touk.osgi.metatype.exporter.domain.Config
+import pl.touk.osgi.metatype.exporter.domain.MetatypeExporter
+import pl.touk.osgi.metatype.exporter.domain.MetatypeParser
 
 @Mojo(name = 'export', defaultPhase = LifecyclePhase.PACKAGE)
 @CompileStatic
@@ -25,11 +28,12 @@ class MavenPlugin extends AbstractMojo {
     void execute() throws MojoExecutionException, MojoFailureException {
         log.info('exporting metatype documentation')
         List<File> metatypeFiles = findMetatypes()
-
+        log.debug("Found metatype files: \n${metatypeFiles.collect { it.absolutePath }.join('\n')}")
         exportConfigIfMetatypeFileExists(metatypeFiles)
     }
 
     private List<File> findMetatypes() {
+        // TODO add support for custom directories
         return project.resources
             .collect { new File(it.directory) }
             .collect { baseDir -> new File(baseDir, 'OSGI-INF') }
@@ -41,10 +45,13 @@ class MavenPlugin extends AbstractMojo {
 
     private void exportConfigIfMetatypeFileExists(List<File> metatypeFiles) {
         if (metatypeFiles) {
-            // TODO move to config
-            MetatypeExporter exporter = new MetatypeExporter(new Config([:]))
-            // TODO parse all, not only first
-            exporter.configToFile(metatypeFiles.find().absolutePath, new File(destination, outputFileName).absolutePath)
+            File destinationDir = new File(destination)
+            destinationDir.mkdirs()
+            File destinationFile = new File(destinationDir, outputFileName)
+            destinationFile.createNewFile()
+            new FileOutputStream(destinationFile).withCloseable { os ->
+                MetatypeExporter.exportContent(metatypeFiles.collectMany { MetatypeParser.parseMetatype(it) }, os)
+            }
         }
     }
 

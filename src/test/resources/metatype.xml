@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
 
-    <OCD id="theseAreProperties" name="Properties name">
+    <OCD id="theseAreProperties" name="Properties name" description="Bla">
         <AD id="id1" required="true" type="String" description="desc1" name="name1"/>
         <AD id="id2" required="false" type="Long" description="desc2" default="123"/>
-        <AD id="id3" type="Integer" />
+        <AD id="id3" type="Integer" >
+            <Option label="l1" value="15"/>
+            <Option label="l1" value="30"/>
+        </AD>
     </OCD>
 
     <Designate pid="this.is.sample.pid">
