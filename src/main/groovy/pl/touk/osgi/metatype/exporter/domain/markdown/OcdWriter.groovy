@@ -12,8 +12,10 @@ import pl.touk.osgi.metatype.exporter.domain.model.Option
 class OcdWriter {
 
     private final ObjectClassDefinition ocd
+    private final LanguageSupport languageSupport
 
-    OcdWriter(ObjectClassDefinition ocd) {
+    OcdWriter(ObjectClassDefinition ocd, LanguageSupport languageSupport) {
+        this.languageSupport = languageSupport
         this.ocd = ocd
     }
 
@@ -26,7 +28,7 @@ class OcdWriter {
 
     private String printHeader() {
         return """\
-# `${ocd.name ? "$ocd.name ($ocd.id)" : ocd.id}` for pid `$ocd.forPid`
+# `${ocd.name ? "$ocd.name ($ocd.id)" : ocd.id}` ${languageSupport.headerForPid} `$ocd.forPid`
 ${ocd.description ? "\n${ocd.description}\n" : ''}"""
     }
 
@@ -40,21 +42,18 @@ ${ocd.description ? "\n${ocd.description}\n" : ''}"""
     }
 
     private static String format(List<Option> options) {
-        if (options) {
-            return "<ul>${options.collect { "<li>$it.value</li>" }.join('')}</ul>"
-        }
-        return ''
+        return options ? "<ul>${options.collect { "<li>$it.value</li>" }.join('')}</ul>" : ''
     }
 
     private String[] neededHeaders() {
         return [
-            'ID',
-            hasAttributeNames() ? 'Name' : null,
-            'Required',
-            'Type',
-            hasDefaultValue() ? 'Default value' : null,
-            hasOptions() ? 'Options' : null,
-            hasDescription() ? 'Description' : null,
+            languageSupport.attributeHeaderId,
+            hasAttributeNames() ? languageSupport.attributeHeaderName : null,
+            languageSupport.attributeHeaderRequired,
+            languageSupport.attributeHeaderType,
+            hasDefaultValue() ? languageSupport.attributeHeaderDefaultValue : null,
+            hasOptions() ? languageSupport.attributeHeaderOptions : null,
+            hasDescription() ? languageSupport.attributeHeaderDescription : null,
         ].findAll() as String[]
     }
 
@@ -62,7 +61,7 @@ ${ocd.description ? "\n${ocd.description}\n" : ''}"""
         return [
             attribute.id,
             hasAttributeNames() ? (attribute.name ?: '') : null,
-            attribute.required,
+            attribute.required ? languageSupport.attributeRequiredTrue : languageSupport.attributeRequiredFalse,
             attribute.type,
             hasDefaultValue() ? (attribute.defaultValue ?: '') : null,
             hasOptions() ? format(attribute.options) : null,

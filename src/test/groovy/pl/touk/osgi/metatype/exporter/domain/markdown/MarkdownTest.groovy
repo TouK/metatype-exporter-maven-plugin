@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 class MarkdownTest extends Specification {
 
-    def 'all fields and one row'() {
+    def 'should write header and full attribute'() {
         given:
             List<ObjectClassDefinition> objectClassDefinitions = [
                 new ObjectClassDefinition(
@@ -38,12 +38,12 @@ sample OCD description
 
 | ID        | Name        | Required | Type   | Default value        | Options                                           | Description        |
 | --------- | ----------- | -------- | ------ | -------------------- | ------------------------------------------------- | ------------------ |
-| sample.id | sample name | true     | String | sample default value | <ul><li>v1</li><li>sample default value</li></ul> | sample description |'''
+| sample.id | sample name | Yes      | String | sample default value | <ul><li>v1</li><li>sample default value</li></ul> | sample description |'''
         expect:
-            new Markdown(objectClassDefinitions).content() == expected
+            new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
 
-    def 'without name and description and one row'() {
+    def 'should write header without ocd name and description'() {
         given:
             List<ObjectClassDefinition> objectClassDefinitions = [
                 new ObjectClassDefinition(
@@ -66,12 +66,12 @@ sample OCD description
 
 | ID        | Name        | Required | Type   | Default value        | Description        |
 | --------- | ----------- | -------- | ------ | -------------------- | ------------------ |
-| sample.id | sample name | true     | String | sample default value | sample description |'''
+| sample.id | sample name | Yes      | String | sample default value | sample description |'''
         expect:
-            new Markdown(objectClassDefinitions).content() == expected
+            new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
 
-    def 'OCD with two full attributes'() {
+    def 'should write two attributes'() {
         given:
             List<ObjectClassDefinition> objectClassDefinitions = [
                 new ObjectClassDefinition(
@@ -102,13 +102,13 @@ sample OCD description
 
 | ID        | Name        | Required | Type        | Default value        | Description        |
 | --------- | ----------- | -------- | ----------- | -------------------- | ------------------ |
-| other.id  | other name  | false    | other type  | other default value  | other description  |
-| sample.id | sample name | true     | sample type | sample default value | sample description |'''
+| other.id  | other name  | No       | other type  | other default value  | other description  |
+| sample.id | sample name | Yes      | sample type | sample default value | sample description |'''
         expect:
-            new Markdown(objectClassDefinitions).content() == expected
+            new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
 
-    def 'OCD with only required and full rows attributes'() {
+    def 'should write only available attribute information'() {
         given:
             List<ObjectClassDefinition> objectClassDefinitions = [
                 new ObjectClassDefinition(
@@ -139,13 +139,13 @@ sample OCD description
 
 | ID        | Name        | Required | Type        | Default value        | Options                       | Description        |
 | --------- | ----------- | -------- | ----------- | -------------------- | ----------------------------- | ------------------ |
-| sample.id | sample name | true     | sample type | sample default value | <ul><li>a</li><li>b</li></ul> | sample description |
-| empty.id  |             | true     | some type   |                      |                               |                    |'''
+| sample.id | sample name | Yes      | sample type | sample default value | <ul><li>a</li><li>b</li></ul> | sample description |
+| empty.id  |             | Yes      | some type   |                      |                               |                    |'''
         expect:
-            new Markdown(objectClassDefinitions).content() == expected
+            new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
 
-    def 'only required fields'() {
+    def 'should write only basic attribute'() {
         given:
             List<ObjectClassDefinition> objectClassDefinitions = [
                 new ObjectClassDefinition(
@@ -165,9 +165,9 @@ sample OCD description
 
 | ID       | Required | Type      |
 | -------- | -------- | --------- |
-| empty.id | true     | some type |'''
+| empty.id | Yes      | some type |'''
         expect:
-            new Markdown(objectClassDefinitions).content() == expected
+            new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
 
     def "should generate from multiple OCDs"() {
@@ -211,16 +211,58 @@ sample OCD description
 
 | ID       | Required | Type      |
 | -------- | -------- | --------- |
-| empty.id | true     | some type |
+| empty.id | Yes      | some type |
 
 # `test2` for pid `bla2`
 
 | ID        | Name        | Required | Type        | Default value        | Description        |
 | --------- | ----------- | -------- | ----------- | -------------------- | ------------------ |
-| other.id  | other name  | false    | other type  | other default value  | other description  |
-| sample.id | sample name | true     | sample type | sample default value | sample description |'''
+| other.id  | other name  | No       | other type  | other default value  | other description  |
+| sample.id | sample name | Yes      | sample type | sample default value | sample description |'''
         expect:
-            new Markdown(objectClassDefinitions).content() == expected
+            new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
 
+    }
+
+    def 'should generate OCD in Polish'() {
+        given:
+            List<ObjectClassDefinition> objectClassDefinitions = [
+                new ObjectClassDefinition(
+                    forPid: 'pl.touk.test.test1',
+                    id: 'ocd1',
+                    name: 'sample OCD',
+                    description: 'sample OCD description',
+                    attributes: [
+                        new Attribute(
+                            id: 'sample.id',
+                            name: 'sample name',
+                            description: 'sample description',
+                            type: 'String',
+                            required: true,
+                            defaultValue: 'sample default value',
+                            options: [
+                                new Option(value: 'v1'),
+                                new Option(value: 'sample default value'),
+                            ]
+                        ),
+                        new Attribute(
+                            id: 'sample.empty',
+                            required: false,
+                            type: 'Long'
+                        )
+                    ]
+                )
+            ]
+            String expected = '''\
+# `sample OCD (ocd1)` dla pid `pl.touk.test.test1`
+
+sample OCD description
+
+| ID           | Nazwa       | Wymagany | Typ    | Warto\u015b\u0107 domy\u015blna     | Opcje                                             | Opis               |
+| ------------ | ----------- | -------- | ------ | -------------------- | ------------------------------------------------- | ------------------ |
+| sample.id    | sample name | Tak      | String | sample default value | <ul><li>v1</li><li>sample default value</li></ul> | sample description |
+| sample.empty |             | Nie      | Long   |                      |                                                   |                    |'''
+        expect:
+            new Markdown(objectClassDefinitions, new Locale('pl', 'PL')).content() == expected
     }
 }

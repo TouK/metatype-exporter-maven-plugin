@@ -8,7 +8,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
-import pl.touk.osgi.metatype.exporter.domain.Config
 import pl.touk.osgi.metatype.exporter.domain.MetatypeExporter
 import pl.touk.osgi.metatype.exporter.domain.MetatypeParser
 
@@ -24,11 +23,17 @@ class MavenPlugin extends AbstractMojo {
     @Parameter(required = false, defaultValue = 'Config.md')
     private String outputFileName
 
+    @Parameter(required = false, defaultValue = 'en')
+    private String language
+
+    @Parameter(required = false, defaultValue = '')
+    private String country
+
     @Override
     void execute() throws MojoExecutionException, MojoFailureException {
         log.info('exporting metatype documentation')
         List<File> metatypeFiles = findMetatypes()
-        log.debug("Found metatype files: \n${metatypeFiles.collect { it.absolutePath }.join('\n')}")
+        log.debug("Found metatype files: \n${metatypeFiles*.absolutePath.join('\n')}")
         exportConfigIfMetatypeFileExists(metatypeFiles)
     }
 
@@ -50,8 +55,9 @@ class MavenPlugin extends AbstractMojo {
             File destinationFile = new File(destinationDir, outputFileName)
             destinationFile.createNewFile()
             new FileOutputStream(destinationFile).withCloseable { os ->
-                MetatypeExporter.exportContent(metatypeFiles.collectMany { MetatypeParser.parseMetatype(it) }, os)
+                MetatypeExporter.exportContent(metatypeFiles.collectMany { MetatypeParser.parseMetatype(it) }, os, new Locale(language, country))
             }
+            log.info("Configuration description written to file ${destinationFile.absolutePath}")
         }
     }
 

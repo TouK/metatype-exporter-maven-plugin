@@ -12,7 +12,7 @@ class MetatypeExporterTest extends Specification {
             File destination = File.createTempFile('metatype', '.md')
         when:
             new FileOutputStream(destination).withCloseable {
-                MetatypeExporter.exportContent(model, it)
+                MetatypeExporter.exportContent(model, it, Locale.ENGLISH)
             }
         then:
             destination.exists()
