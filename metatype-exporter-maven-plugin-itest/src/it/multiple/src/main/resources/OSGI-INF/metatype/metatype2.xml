@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.2.0">
+
+    <OCD id="secondProps" name="Properties name">
+        <AD id="id1" type="String"/>
+    </OCD>
+
+    <Designate pid="this.is.second.pid">
+        <Object ocdref="secondProps"/>
+    </Designate>
+</metatype:MetaData>

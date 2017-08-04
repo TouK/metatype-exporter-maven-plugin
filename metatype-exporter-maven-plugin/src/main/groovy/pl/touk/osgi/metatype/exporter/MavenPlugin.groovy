@@ -10,6 +10,7 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import pl.touk.osgi.metatype.exporter.domain.MetatypeExporter
 import pl.touk.osgi.metatype.exporter.domain.MetatypeParser
+import pl.touk.osgi.metatype.exporter.domain.model.ObjectClassDefinition
 
 @Mojo(name = 'export', defaultPhase = LifecyclePhase.PACKAGE)
 @CompileStatic
@@ -20,7 +21,7 @@ class MavenPlugin extends AbstractMojo {
     @Parameter(required = false, defaultValue = '${project.build.directory}')
     private String destination
 
-    @Parameter(required = false, defaultValue = 'Config.md')
+    @Parameter(required = false, defaultValue = 'Configuration.md')
     private String outputFileName
 
     @Parameter(required = false, defaultValue = 'en')
@@ -38,14 +39,9 @@ class MavenPlugin extends AbstractMojo {
     }
 
     private List<File> findMetatypes() {
-        // TODO add support for custom directories
-        return project.resources
-            .collect { new File(it.directory) }
-            .collect { baseDir -> new File(baseDir, 'OSGI-INF') }
-            .findAll { it.exists() }
-            .collect { osgiInf -> new File(osgiInf, 'metatype') }
-            .findAll { it.exists() }
-            .collectMany { metatypeDir -> metatypeDir.listFiles({ String fileName -> fileName.endsWith('.xml') } as FilenameFilter) as List }
+        File baseDir = new File(project.build.outputDirectory)
+        File metatypeDir = new File(baseDir, 'OSGI-INF/metatype')
+        return metatypeDir.exists() ? metatypeDir.listFiles(new XmlFileFilter()) as List : []
     }
 
     private void exportConfigIfMetatypeFileExists(List<File> metatypeFiles) {
@@ -55,10 +51,17 @@ class MavenPlugin extends AbstractMojo {
             File destinationFile = new File(destinationDir, outputFileName)
             destinationFile.createNewFile()
             new FileOutputStream(destinationFile).withCloseable { os ->
-                MetatypeExporter.exportContent(metatypeFiles.collectMany { MetatypeParser.parseMetatype(it) }, os, new Locale(language, country))
+                log.debug("Generation for language $language and country $country")
+                MetatypeExporter.exportContent(parseFiles(metatypeFiles), os, new Locale(language, country ?: ''))
             }
             log.info("Configuration description written to file ${destinationFile.absolutePath}")
         }
+    }
+
+    private static List<ObjectClassDefinition> parseFiles(List<File> metatypeFiles) {
+        return metatypeFiles
+            .collectMany { MetatypeParser.parseMetatype(it) }
+            .sort { (it as ObjectClassDefinition).forPid }
     }
 
 }

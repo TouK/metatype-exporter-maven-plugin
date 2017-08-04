@@ -21,7 +21,7 @@ class LanguageSupport {
     final String attributeRequiredFalse
 
     LanguageSupport(Locale locale) {
-        resourceBundle = ResourceBundle.getBundle('MarkdownBundle', locale)
+        resourceBundle = ResourceBundle.getBundle('MarkdownBundle', locale, this.class.classLoader)
         headerForPid = resourceBundle.getString('forPid')
         attributeHeaderId = resourceBundle.getString('attributeHeaderId')
         attributeHeaderName = resourceBundle.getString('attributeHeaderName')
