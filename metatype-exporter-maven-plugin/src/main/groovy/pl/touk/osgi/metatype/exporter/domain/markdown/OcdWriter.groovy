@@ -59,7 +59,7 @@ ${ocd.description ? "\n${ocd.description}\n" : ''}"""
 
     private String[] asRow(Attribute attribute) {
         return [
-            attribute.id,
+            "`${attribute.id}`",
             hasAttributeNames() ? (attribute.name ?: '') : null,
             attribute.required ? languageSupport.attributeRequiredTrue : languageSupport.attributeRequiredFalse,
             attribute.type,

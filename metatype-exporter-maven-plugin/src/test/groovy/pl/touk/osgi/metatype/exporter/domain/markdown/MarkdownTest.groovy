@@ -36,9 +36,9 @@ class MarkdownTest extends Specification {
 
 sample OCD description
 
-| ID        | Name        | Required | Type   | Default value        | Options                                           | Description        |
-| --------- | ----------- | -------- | ------ | -------------------- | ------------------------------------------------- | ------------------ |
-| sample.id | sample name | Yes      | String | sample default value | <ul><li>v1</li><li>sample default value</li></ul> | sample description |'''
+| ID          | Name        | Required | Type   | Default value        | Options                                           | Description        |
+| ----------- | ----------- | -------- | ------ | -------------------- | ------------------------------------------------- | ------------------ |
+| `sample.id` | sample name | Yes      | String | sample default value | <ul><li>v1</li><li>sample default value</li></ul> | sample description |'''
         expect:
             new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
@@ -64,9 +64,9 @@ sample OCD description
             String expected = '''\
 # `ocd1` for pid `pl.touk.test.test1`
 
-| ID        | Name        | Required | Type   | Default value        | Description        |
-| --------- | ----------- | -------- | ------ | -------------------- | ------------------ |
-| sample.id | sample name | Yes      | String | sample default value | sample description |'''
+| ID          | Name        | Required | Type   | Default value        | Description        |
+| ----------- | ----------- | -------- | ------ | -------------------- | ------------------ |
+| `sample.id` | sample name | Yes      | String | sample default value | sample description |'''
         expect:
             new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
@@ -100,10 +100,10 @@ sample OCD description
             String expected = '''\
 # `test` for pid `bla`
 
-| ID        | Name        | Required | Type        | Default value        | Description        |
-| --------- | ----------- | -------- | ----------- | -------------------- | ------------------ |
-| other.id  | other name  | No       | other type  | other default value  | other description  |
-| sample.id | sample name | Yes      | sample type | sample default value | sample description |'''
+| ID          | Name        | Required | Type        | Default value        | Description        |
+| ----------- | ----------- | -------- | ----------- | -------------------- | ------------------ |
+| `other.id`  | other name  | No       | other type  | other default value  | other description  |
+| `sample.id` | sample name | Yes      | sample type | sample default value | sample description |'''
         expect:
             new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
@@ -137,10 +137,10 @@ sample OCD description
             String expected = '''\
 # `test` for pid `bla`
 
-| ID        | Name        | Required | Type        | Default value        | Options                       | Description        |
-| --------- | ----------- | -------- | ----------- | -------------------- | ----------------------------- | ------------------ |
-| sample.id | sample name | Yes      | sample type | sample default value | <ul><li>a</li><li>b</li></ul> | sample description |
-| empty.id  |             | Yes      | some type   |                      |                               |                    |'''
+| ID          | Name        | Required | Type        | Default value        | Options                       | Description        |
+| ----------- | ----------- | -------- | ----------- | -------------------- | ----------------------------- | ------------------ |
+| `sample.id` | sample name | Yes      | sample type | sample default value | <ul><li>a</li><li>b</li></ul> | sample description |
+| `empty.id`  |             | Yes      | some type   |                      |                               |                    |'''
         expect:
             new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
@@ -163,9 +163,9 @@ sample OCD description
             String expected = '''\
 # `test` for pid `bla`
 
-| ID       | Required | Type      |
-| -------- | -------- | --------- |
-| empty.id | Yes      | some type |'''
+| ID         | Required | Type      |
+| ---------- | -------- | --------- |
+| `empty.id` | Yes      | some type |'''
         expect:
             new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
     }
@@ -209,16 +209,16 @@ sample OCD description
             String expected = '''\
 # `test1` for pid `bla1`
 
-| ID       | Required | Type      |
-| -------- | -------- | --------- |
-| empty.id | Yes      | some type |
+| ID         | Required | Type      |
+| ---------- | -------- | --------- |
+| `empty.id` | Yes      | some type |
 
 # `test2` for pid `bla2`
 
-| ID        | Name        | Required | Type        | Default value        | Description        |
-| --------- | ----------- | -------- | ----------- | -------------------- | ------------------ |
-| other.id  | other name  | No       | other type  | other default value  | other description  |
-| sample.id | sample name | Yes      | sample type | sample default value | sample description |'''
+| ID          | Name        | Required | Type        | Default value        | Description        |
+| ----------- | ----------- | -------- | ----------- | -------------------- | ------------------ |
+| `other.id`  | other name  | No       | other type  | other default value  | other description  |
+| `sample.id` | sample name | Yes      | sample type | sample default value | sample description |'''
         expect:
             new Markdown(objectClassDefinitions, Locale.ENGLISH).content() == expected
 
@@ -258,10 +258,10 @@ sample OCD description
 
 sample OCD description
 
-| ID           | Nazwa       | Wymagany | Typ    | Warto\u015b\u0107 domy\u015blna     | Opcje                                             | Opis               |
-| ------------ | ----------- | -------- | ------ | -------------------- | ------------------------------------------------- | ------------------ |
-| sample.id    | sample name | Tak      | String | sample default value | <ul><li>v1</li><li>sample default value</li></ul> | sample description |
-| sample.empty |             | Nie      | Long   |                      |                                                   |                    |'''
+| ID             | Nazwa       | Wymagany | Typ    | Warto\u015b\u0107 domy\u015blna     | Opcje                                             | Opis               |
+| -------------- | ----------- | -------- | ------ | -------------------- | ------------------------------------------------- | ------------------ |
+| `sample.id`    | sample name | Tak      | String | sample default value | <ul><li>v1</li><li>sample default value</li></ul> | sample description |
+| `sample.empty` |             | Nie      | Long   |                      |                                                   |                    |'''
         expect:
             new Markdown(objectClassDefinitions, new Locale('pl', 'PL')).content() == expected
     }
