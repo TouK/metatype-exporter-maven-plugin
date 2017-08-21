@@ -1,3 +1,5 @@
+[![Build status](https://travis-ci.org/TouK/metatype-exporter-maven-plugin.svg?branch=master)](https://travis-ci.org/TouK/metatype-exporter-maven-plugin)
+
 # metatype-exporter-maven-plugin
 
 `metatype-exporter-maven-plugin` generates a markdown description from OSGI metatype files. The files must be found in the location `${project.build.outputDirectory}/OSGI-INF/metatype/*.xml`. The markdown file will be generated in `target/Configuration.md` by deafault.
