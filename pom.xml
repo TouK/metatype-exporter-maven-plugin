@@ -14,6 +14,13 @@
         <relativePath />
     </parent>
 
+    <repositories>
+        <repository>
+            <id>philantropist</id>
+            <url>https://philanthropist.touk.pl/nexus/content/repositories/releases</url>
+        </repository>
+    </repositories>
+
     <modules>
         <module>metatype-exporter-maven-plugin</module>
         <module>metatype-exporter-maven-plugin-itest</module>
