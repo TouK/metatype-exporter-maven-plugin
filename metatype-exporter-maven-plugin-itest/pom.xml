@@ -29,4 +29,13 @@
             </build>
         </profile>
     </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>pl.touk.osgi</groupId>
+            <artifactId>custom-language-german</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+            <scope>provided</scope> <!-- just to reorder reactor -->
+        </dependency>
+    </dependencies>
 </project>

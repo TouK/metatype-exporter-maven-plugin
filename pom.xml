@@ -24,6 +24,7 @@
     <modules>
         <module>metatype-exporter-maven-plugin</module>
         <module>metatype-exporter-maven-plugin-itest</module>
+        <module>custom-language-german</module>
     </modules>
 
     <properties>

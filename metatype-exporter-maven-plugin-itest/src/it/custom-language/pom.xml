@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pl.touk.osgi</groupId>
+    <artifactId>simple-project</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>pl.touk.osgi</groupId>
+                <artifactId>metatype-exporter-maven-plugin</artifactId>
+                <version>@metatype-exporter-maven-plugin.version@</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>export</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <language>de</language>
+                    <country>DE</country>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.touk.osgi</groupId>
+                        <artifactId>custom-language-german</artifactId>
+                        <version>1.0.1-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
