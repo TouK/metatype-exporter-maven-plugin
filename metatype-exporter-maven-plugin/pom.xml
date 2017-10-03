@@ -6,6 +6,9 @@
     <artifactId>metatype-exporter-maven-plugin</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
+    <name>OSGi metatype exporter</name>
+    <description>Maven plugin used for exporting OSGI metatype files as more readable formats (Markdown so far)</description>
+    <url>https://github.com/TouK/metatype-exporter-maven-plugin</url>
 
     <parent>
         <groupId>pl.touk</groupId>
@@ -192,11 +195,15 @@
             <id>dpr</id>
             <name>Dominik Przybysz</name>
             <email>dpr@touk.pl</email>
+            <organization>TouK</organization>
+            <organizationUrl>https://touk.pl</organizationUrl>
         </developer>
         <developer>
             <id>pfs</id>
             <name>Piotr Fus</name>
             <email>pfs@touk.pl</email>
+            <organization>TouK</organization>
+            <organizationUrl>https://touk.pl</organizationUrl>
         </developer>
     </developers>
 </project>
