@@ -4,7 +4,7 @@
 
     <groupId>pl.touk.osgi</groupId>
     <artifactId>metatype-exporter-maven-plugin</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>maven-plugin</packaging>
     <name>OSGi metatype exporter</name>
     <description>Maven plugin used for exporting OSGI metatype files as more readable formats (Markdown so far)</description>
@@ -214,7 +214,7 @@
         <url>https://github.com/touk/metatype-exporter-maven-plugin</url>
         <connection>scm:git:git://github.com/touk/metatype-exporter-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:touk/metatype-exporter-maven-plugin.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>metatype-exporter-maven-plugin-1.0.1</tag>
     </scm>
 
     <licenses>
