@@ -10,7 +10,7 @@
     <artifactId>metatype-exporter-maven-plugin-itest</artifactId>
 
     <properties>
-        <metatype-exporter-maven-plugin.version>${project.version}</metatype-exporter-maven-plugin.version>
+        <metatype-exporter-maven-plugin.version>1.0.1</metatype-exporter-maven-plugin.version>
         <maven-invoker-plugin.version>1.10</maven-invoker-plugin.version>
     </properties>
 
