@@ -10,13 +10,6 @@
     <description>Maven plugin used for exporting OSGI metatype files as more readable formats (Markdown so far)</description>
     <url>https://github.com/TouK/metatype-exporter-maven-plugin</url>
 
-    <repositories>
-        <repository>
-            <id>philantropist</id>
-            <url>https://philanthropist.touk.pl/nexus/content/repositories/releases</url>
-        </repository>
-    </repositories>
-
     <properties>
         <groovy-all.version>2.4.12</groovy-all.version>
         <maven-plugin.version>3.3.9</maven-plugin.version>
