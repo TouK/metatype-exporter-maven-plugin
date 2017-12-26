@@ -4,27 +4,6 @@
 
 `metatype-exporter-maven-plugin` generates a markdown description from OSGI metatype files. The files must be found in the location `${project.build.outputDirectory}/OSGI-INF/metatype/*.xml`. The markdown file will be generated in `target/Configuration.md` by deafault.
 
-## Remote repository
-
-`metatype-exporter-maven-plugin` is available at `philanthropist.touk.pl`.
-
-Just add the plugin repository to your maven pom:
-
-```xml
-<project>
-    ...
-    <pluginRepositories>
-        ...
-        <pluginRepository>
-            <id>touk</id>
-            <url>https://philanthropist.touk.pl/nexus/content/repositories/releases</url>
-        </pluginRepository>
-    ...
-    </pluginRepositories>
-    ...
-</project>
-```
-
 ## Usage
 
 ### TL;DR;
